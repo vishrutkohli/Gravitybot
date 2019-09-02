@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    
+    <title></title>
+    <style type="text/css">
+            input{
+        padding: 10px;
+        border: 1px solid #ddd;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        font-size: 30px;
+    }
+    </style>
+</head>
+<body>
+<script type="text/javascript">
+(function(d, s, id){
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.com/en_US/messenger.Extensions.js";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'Messenger'));
+</script>
+<script type="text/javascript">
+function httpGet(theUrl) 
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.send( null );
+    // return xmlHttp.responseText;
+}
+
+  window.extAsyncInit = function() {
+    
+    // the Messenger Extensions JS SDK is done loading 
+    MessengerExtensions.getUserID(function success(uids) {
+    // User ID was successfully obtained. 
+        var psid = uids.psid;
+        alert(psid);
+        console.log(psid);
+        alert(psid)
+        var a  = httpGet('https://dhlbot.herokuapp.com/identity_confirmed?user_id=1439136072791184'); 
+
+  
+    }, function error(err, errorMessage) {
+    alert(errorMessage);
+    alert(err);      
+    // Error handling code
+    });
+
+  };
+    
+</script>
+  
+<center>
+    <h1>Enter Your Id</h1>
+    <input type="password" maxlength=1 id="1" onkeyup="moveOnMax(this,'a')" />
+    <input type="password" maxlength=1 id="a" onkeyup="moveOnMax(this,'b')" />
+    <input type="password" maxlength=1 id="b" onkeyup="moveOnMax(this,'c')" />
+    <input type="password" maxlength=1 id="c" />
+    <br>
+    <h3><a href="/help">Submit</a></h3>
+</center>
+</body>
+<script type="text/javascript">
+    moveOnMax =function (field, nextFieldID) {
+    if (field.value.length == 1) {
+        document.getElementById(nextFieldID).focus();
+    }
+}
+</script>
+</html>
