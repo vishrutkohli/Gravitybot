@@ -25,13 +25,13 @@ def user_details(fbid):
 @csrf_exempt
 def api_ai_webhook(request):
     try:
-        print request.body
+#        print request.body
         x = json.loads(request.body)
-        print request.body
-        print json.loads(request.body)
-    
+#        print request.body
+#        print json.loads(request.body)
+
     except Exception as e:
-        print e
+#        print e
         return HttpResponse(e)
     return HttpResponse("Post Succcessful")
 
@@ -47,19 +47,19 @@ def post_facebook_message(fbid,message_text):
     try:
         response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":message_text}})
         status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
-        print status.json()
+#        print status.json()
     except Exception as e:
         
-        print e
+#        print e
         pass
     try:
         response_msg = json.dumps(message_text)
         status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
-        print status.json()
+#        print status.json()
     except Exception as e:
         
-        print e
-        pass        
+#        print e
+        pass
 
 #full implementation of facebook messenger api , facebook grpah api to send a recieve messages to handle user requests . 
 class MyChatBotView(generic.View):
@@ -78,11 +78,11 @@ class MyChatBotView(generic.View):
         incoming_message= json.loads(self.request.body.decode('utf-8'))
         for entry in incoming_message['entry']:
             for message in entry['messaging']:
-                print "this is message" + str(message)
+#                print "this is message" + str(message)
                 try:
                     sender_id = message['sender']['id']
                     message_text = message['message']['text']
-                    print "just going to  invoke natural_text"
+#                    print "just going to  invoke natural_text"
                     user_instance = user.objects.get_or_create(fbid =sender_id)[0]
                     user_detail = user_details(sender_id)
                     name = '%s %s'%(user_detail['first_name'],user_detail['last_name'])
@@ -92,14 +92,14 @@ class MyChatBotView(generic.View):
                         reply = event_name(sender_id , "welcome")
                     else:
                         reply = natural_text(sender_id , message_text)
-                        print "this is reply " + str(reply)
-                    
+#                        print "this is reply " + str(reply)
+
                     try:
                         
                         for message in reply['text']:
                             post_facebook_message(sender_id,message )
                     except Exception as e:
-                        print e
+#                        print e
                         pass
                     
                     try:    
@@ -107,60 +107,60 @@ class MyChatBotView(generic.View):
                         for message in reply['attachments']:
                             post_facebook_message(sender_id, message )
                     except Exception as e:
-                        print e
-                        pass    
+#                        print e
+                        pass
                     
                 except Exception as e:
-                    print e
+#                    print e
                     pass
 
                 try:
                     sender_id = message['sender']['id']
-                    print "just going to  invoke postback"
+#                    print "just going to  invoke postback"
                     user_instance = user.objects.get_or_create(fbid =sender_id)[0]
                     user_detail = user_details(sender_id)
                     name = '%s %s'%(user_detail['first_name'],user_detail['last_name'])
                     user_instance.name = name
                     user_instance.save()
-                    print "entered event_name"
+#                    print "entered event_name"
                     message_text  = message['postback']['payload']
-                    print message_text
+#                    print message_text
                     reply = event_name(sender_id , message_text)
                     try:
                         for message in reply['text']:
                             post_facebook_message(sender_id,message )
                     except Exception as e:
-                        print e
+#                        print e
                         pass
                     
                     try:    
                         for message in reply['attachments']:
                             post_facebook_message(sender_id, message )
                     except Exception as e:
-                        print e
-                        pass  
+#                        print e
+                        pass
 
                 except Exception as e:
-                    print e
+#                    print e
                     pass
                 try:
-                    print "entered event_name"
+#                    print "entered event_name"
                     message_text  = message['message']['quick_reply']['payload']
-                    print message_text
+#                    print message_text
                     reply = event_name(sender_id , message_text)
                     try:
                         for message in reply['text']:
                             post_facebook_message(sender_id,message )
                     except Exception as e:
-                        print e
+#                        print e
                         pass
                     
                     try:    
                         for message in reply['attachments']:
                             post_facebook_message(sender_id, message )
                     except Exception as e:
-                        print e
-                        pass    
+#                        print e
+                        pass
                 except Exception as e:
                     print e
                     pass
@@ -181,7 +181,7 @@ class MyChatBotView(generic.View):
                         payload = json.dumps(payload)
                         r = requests.post("http://139.59.40.238:8080/about" , data = payload)
                         r = json.loads(r.text)
-                        print "this is box"  + str(r['boxName'])
+#                        print "this is box"  + str(r['boxName'])
                         order_instance.type_of_box = r['boxName']
                         order_instance.save() 
                               
@@ -190,14 +190,14 @@ class MyChatBotView(generic.View):
                         for message in reply['text']:
                             post_facebook_message(sender_id,message )
                     except Exception as e:
-                        print e
+#                        print e
                         pass
                 
                     try:    
                         for message in reply['attachments']:
                             post_facebook_message(sender_id, message )
                     except Exception as e:
-                        print e
+#                        print e
                         pass
                           
                           
@@ -208,8 +208,8 @@ class MyChatBotView(generic.View):
                     
                    
                 except Exception as e:
-                    print "this is image exception" + str(e)
-                    pass 
+#                    print "this is image exception" + str(e)
+                    pass
         return HttpResponse()  
 
 def index(request):
